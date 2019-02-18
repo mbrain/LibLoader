@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <dirent.h>
+#include <string.h>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -52,12 +53,15 @@ int main(int argc, char **argv) {
     while ((de = readdir(dr)) != NULL) {
         
         #ifdef _WIN32
-        if(EndsWith(de->d_name, ".dll") == 0) continue;
+        char *libname = de->d_name;
+        if(EndsWith(libname, ".dll") == 0) continue;
         #else
-        if(EndsWith(de->d_name, ".so") == 0) continue;
+        char libname[] = "./";
+        strcat(libname, de->d_name);
+        if(EndsWith(libname, ".so") == 0) continue;
         #endif
          
-        myLib = MyLoadLib(de->d_name); 
+        myLib = MyLoadLib(libname); 
         
         char *funcname;
         if(argc > 1) funcname = argv[1];

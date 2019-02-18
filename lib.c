@@ -2,26 +2,26 @@
 
 #ifdef _WIN32
 __declspec(dllimport) char *init() {
-    return "CustomMethods: hello, bye";
+    return "lib(a, b)";
 }
 
-__declspec(dllimport) char *hello() {
-    return "Hello";
+__declspec(dllimport) char *a() {
+    return "a";
 }
 
-__declspec(dllimport) char *bye() {
-    return "Bye";
+__declspec(dllimport) char *b() {
+    return "b";
 }
 #else
 __attribute__ ((visibility ("default"))) char *init() {
-    return "CustomMethods: hello, bye";
+    return "lib(a, b)";
 }
 
-__attribute__ ((visibility ("default"))) char *hello() {
-    return "Hello";
+__attribute__ ((visibility ("default"))) char *a() {
+    return "a";
 }
 
-__attribute__ ((visibility ("default"))) char *bye() {
-    return "Bye";
+__attribute__ ((visibility ("default"))) char *b() {
+    return "b";
 }
 #endif

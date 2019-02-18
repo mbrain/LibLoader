@@ -2,39 +2,39 @@
 
 #ifdef _WIN32
 #include <windows.h>
-typedef HANDLE my_lib_t;
+typedef HANDLE lib_t;
 #else
 #include <dlfcn.h>
-typedef void* my_lib_t;
+typedef void* lib_t;
 #endif
 
-my_lib_t MyLoadLib(const char* szMyLib) {
+lib_t MyLoadLib(const char* lib) {
     #ifdef _WIN32
-    return LoadLibraryA(szMyLib);
+    return LoadLibraryA(lib);
     #else 
-    return dlopen(szMyLib, RTLD_LAZY);
+    return dlopen(lib, RTLD_NOW);
     #endif 
 }
 
-void MyUnloadLib(my_lib_t hMyLib) {
+void MyUnloadLib(lib_t lib) {
     #ifdef _WIN32
-    FreeLibrary(hMyLib);
+    FreeLibrary(lib);
     #else 
-    dlclose(hMyLib);
+    dlclose(lib);
     #endif 
 }
 
-void* MyLoadProc(my_lib_t hMyLib, const char* szMyProc) {
+void* MyLoadProc(lib_t lib, const char* proc) {
     #ifdef _WIN32
-    return GetProcAddress(hMyLib, szMyProc);
+    return GetProcAddress(lib, proc);
     #else 
-    return dlsym(hMyLib, szMyProc);
+    return dlsym(lib, proc);
     #endif 
 }
 
 int main(int argc, char **argv) {
 
-    my_lib_t myLib = NULL;
+    lib_t myLib = NULL;
     #ifdef _WIN32
     myLib = MyLoadLib("lib.dll");
     #else

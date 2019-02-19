@@ -63,12 +63,12 @@ int main(int argc, char **argv) {
          
         myLib = MyLoadLib(libname); 
         
-        char *funcname;
+        void *funcname;
         if(argc > 1) funcname = argv[1];
         else funcname = "init";
         
         if(!MyLoadProc(myLib, funcname)) continue;      
-        char* (*func_ptr)() = MyLoadProc(myLib, funcname); 
+        void *(*func_ptr)() = MyLoadProc(myLib, funcname); 
         
         char *result;
         result = (*func_ptr)();

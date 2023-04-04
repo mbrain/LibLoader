@@ -34,50 +34,23 @@ void* MyLoadProc(lib_t lib, const char* proc) {
     #endif 
 }
 
-// https://stackoverflow.com/questions/744766/
-int EndsWith(const char *str, const char *suffix) {
-    if (!str || !suffix) return 0;
-    size_t lenstr = strlen(str);
-    size_t lensuffix = strlen(suffix);
-    if (lensuffix >  lenstr) return 0;
-    return strncmp(str + lenstr - lensuffix, suffix, lensuffix) == 0;
-}
-
 int main(int argc, char **argv) {
-
-    struct dirent *de;
-    DIR *dr = opendir(".");
 
     lib_t myLib = NULL;
     
-    while ((de = readdir(dr)) != NULL) {
+    myLib = MyLoadLib("./lib1.so"); 
         
-        #ifdef _WIN32
-        char *libname = de->d_name;
-        if(EndsWith(libname, ".dll") == 0) continue;
-        #else
-        char libname[] = "./";
-        strcat(libname, de->d_name);
-        if(EndsWith(libname, ".so") == 0) continue;
-        #endif
-         
-        myLib = MyLoadLib(libname); 
+    void *funcname;
+    funcname = "init";
         
-        void *funcname;
-        if(argc > 1) funcname = argv[1];
-        else funcname = "init";
+    void *(*func_ptr)() = MyLoadProc(myLib, funcname); 
         
-        if(!MyLoadProc(myLib, funcname)) continue;      
-        void *(*func_ptr)() = MyLoadProc(myLib, funcname); 
+    char *result;
+    result = (*func_ptr)();
+    printf("%s", result);
         
-        char *result;
-        result = (*func_ptr)();
-        printf("%s", result);
-        
-        MyUnloadLib(myLib);
-    
-    } 
-        
+    MyUnloadLib(myLib);
+            
     return 0;
     
 }

@@ -38,7 +38,7 @@ int main(int argc, char **argv) {
 
     lib_t myLib = NULL;
     
-    myLib = MyLoadLib("./lib1.so"); 
+    myLib = MyLoadLib("./myLib.so"); 
         
     void *funcname;
     funcname = "init";
